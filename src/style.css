@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    @apply h-full;
+  }
+  
+  #app {
+    @apply h-full;
+  }
+}
+
+@layer components {
+  .upload-dragger {
+    @apply border-2 border-dashed border-gray-300 rounded-lg p-8 text-center transition-colors duration-200;
+  }
+  
+  .upload-dragger:hover {
+    @apply border-primary-500;
+  }
+  
+  .upload-dragger.is-dragover {
+    @apply border-primary-500 bg-primary-50;
+  }
+  
+  .conversion-card {
+    @apply bg-white rounded-lg shadow-sm border border-gray-200 p-6;
+  }
+  
+  .feature-card {
+    @apply bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200;
+  }
+}
+
+/* Element Plus 自定义样式 */
+.el-upload-dragger {
+  border: 2px dashed #d1d5db !important;
+  border-radius: 8px !important;
+  background-color: #fafafa !important;
+  transition: all 0.2s !important;
+}
+
+.el-upload-dragger:hover {
+  border-color: #3b82f6 !important;
+  background-color: #eff6ff !important;
+}
+
+.el-upload-dragger.is-dragover {
+  border-color: #3b82f6 !important;
+  background-color: #eff6ff !important;
+}
+
+/* 代码编辑器样式 */
+.code-editor {
+  @apply font-mono text-sm leading-relaxed;
+}
