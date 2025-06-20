@@ -74,14 +74,17 @@ export class MD2WordConverter {
     
     for (const chromePath of paths) {
       try {
-        if (fs.existsSync(chromePath)) {
-          return chromePath;
-        }
+        // 使用异步访问检查文件是否存在
+        await fs.promises.access(chromePath);
+        console.log(`[MD2WordConverter] Found Chrome at: ${chromePath}`);
+        return chromePath;
       } catch (error) {
+        // 文件不存在，继续检查下一个路径
         continue;
       }
     }
     
+    console.log(`[MD2WordConverter] No system Chrome found, using bundled Chromium`);
     // 如果找不到系统 Chrome，返回 undefined 让 Puppeteer 使用自带的 Chromium
     return undefined;
   }
@@ -568,12 +571,15 @@ export class MD2WordConverter {
           '--disable-backgrounding-occluded-windows',
           '--disable-renderer-backgrounding',
           '--disable-extensions',
-          '--enable-chrome-browser-cloud-management=false',
           '--disable-font-subpixel-positioning',
           '--disable-partial-raster',
           '--disable-skia-runtime-opts',
           '--run-all-compositor-stages-before-draw',
-          '--disable-new-content-rendering-timeout'
+          '--disable-new-content-rendering-timeout',
+          // Puppeteer 23.x SVG渲染优化参数
+          '--disable-features=TranslateUI',
+          '--disable-ipc-flooding-protection',
+          '--memory-pressure-off'
         ],
         executablePath: await this.getChromePath()
       });
@@ -621,12 +627,16 @@ export class MD2WordConverter {
           '--disable-backgrounding-occluded-windows',
           '--disable-renderer-backgrounding',
           '--disable-extensions',
-          '--enable-chrome-browser-cloud-management=false',
           '--disable-font-subpixel-positioning',
           '--disable-partial-raster',
           '--disable-skia-runtime-opts',
           '--run-all-compositor-stages-before-draw',
-          '--disable-new-content-rendering-timeout'
+          '--disable-new-content-rendering-timeout',
+          // Puppeteer 23.x 数学公式渲染优化参数
+          '--disable-features=TranslateUI',
+          '--disable-ipc-flooding-protection',
+          '--memory-pressure-off',
+          '--disable-blink-features=AutomationControlled'
         ],
         executablePath: await this.getChromePath()
       });

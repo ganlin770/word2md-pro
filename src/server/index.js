@@ -21,10 +21,15 @@ app.use(express.static(path.join(__dirname, '../../dist')));
 
 // 文件上传配置
 const storage = multer.diskStorage({
-  destination: async (req, file, cb) => {
+  destination: (req, file, cb) => {
     const uploadDir = path.join(__dirname, '../../uploads');
-    await fs.mkdir(uploadDir, { recursive: true });
-    cb(null, uploadDir);
+    // 同步创建目录，避免在callback中使用async/await
+    fs.mkdir(uploadDir, { recursive: true })
+      .then(() => cb(null, uploadDir))
+      .catch(err => {
+        console.error('[Server] 创建上传目录失败:', err);
+        cb(err);
+      });
   },
   filename: (req, file, cb) => {
     // 确保文件名使用正确的UTF-8编码
